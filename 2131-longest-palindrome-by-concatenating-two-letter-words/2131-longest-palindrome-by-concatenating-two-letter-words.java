@@ -28,3 +28,9 @@ class Solution {
         return result;
     }
 }
+
+/* A good discussion on this problem
+
+https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/discuss/2772074/Java-oror-Explained-in-Detailoror-Simple-and-Fast-Solutionoror-Counting-oror-Hash-Table-oror-Greedy
+
+*/
