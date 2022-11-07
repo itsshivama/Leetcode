@@ -3,6 +3,7 @@ class Solution {
         char ar[] = String.valueOf(num).toCharArray(); 
 
             for(int i =0;i<ar.length;i++){    
+                //because 9 is always greater than 6
                 if(ar[i]=='6'){                        
                     ar[i]='9';
                     break;
