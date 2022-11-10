@@ -1,13 +1,13 @@
 class Solution {
     public String removeDuplicates(String s) {
-        StringBuilder st = new StringBuilder();
-        for(char c: s.toCharArray()){
-            if(st.length()>0&&st.charAt(st.length()-1)==c)
-                st.deleteCharAt(st.length()-1);
+        StringBuilder sb = new StringBuilder();
+        for(char ch: s.toCharArray()){
+            if(sb.length()>0&&sb.charAt(sb.length()-1)==ch)
+                sb.deleteCharAt(sb.length()-1);
             else
-                st.append(c);
+                sb.append(ch);
         }
-        return st.toString();
+        return sb.toString();
         
     }
 }
