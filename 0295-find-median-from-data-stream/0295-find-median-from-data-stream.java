@@ -1,24 +1,44 @@
 class MedianFinder {
-    
-    ArrayList<Integer> list;
+
+    private final PriorityQueue<Integer> leftQ;
+    private final PriorityQueue<Integer> rightQ;
 
     public MedianFinder() {
-        list = new ArrayList<>();
+        leftQ = new PriorityQueue<>((o1, o2) -> o2 -o1);
+        rightQ = new PriorityQueue<>();
+
     }
-    
+
     public void addNum(int num) {
-        int i=0;
-        if(list.size() > 0){
-            for (i = 0; (i < list.size()  && list.get(i) < num); i++);
-            list.add(i , num);
+        Integer leftUpperBound = leftQ.peek();
+        Integer rightLowBound = rightQ.peek();
+
+        if( rightLowBound == null || num < rightLowBound ) {
+            leftQ.offer(num);
+        } else {
+            rightQ.offer(num);
         }
-        else list.add(num);
+
+//        balance two heaps
+
+        if(leftQ.size() -rightQ.size() > 1) {
+            Integer leftLargest = leftQ.poll();
+            rightQ.offer(leftLargest);
+        } else if(rightQ.size() -leftQ.size() > 1) {
+            Integer rightSmallest = rightQ.poll();
+            leftQ.offer(rightSmallest);
+        }
+
     }
-    
+
     public double findMedian() {
-        int index = list.size()/2;
-        if(list.size() % 2 == 0) return (double) (list.get(index) + list.get(index - 1))/2;
-        else return list.get(index);
+     if(leftQ.size() -rightQ.size() == 1) {
+            return leftQ.peek();
+        } else if(rightQ.size() -leftQ.size() ==1) {
+            return rightQ.peek();
+        }
+        double v = (leftQ.peek() + rightQ.peek());
+        return   v /2;
+
     }
-    
 }
