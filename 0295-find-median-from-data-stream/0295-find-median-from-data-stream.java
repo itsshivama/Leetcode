@@ -1,44 +1,20 @@
 class MedianFinder {
-
-    private final PriorityQueue<Integer> leftQ;
-    private final PriorityQueue<Integer> rightQ;
-
+    PriorityQueue<Integer> maxheap, minheap;
+    int size;
     public MedianFinder() {
-        leftQ = new PriorityQueue<>((o1, o2) -> o2 -o1);
-        rightQ = new PriorityQueue<>();
-
+        minheap = new PriorityQueue<>();
+        maxheap = new PriorityQueue<>(Collections.reverseOrder());
     }
-
+    
     public void addNum(int num) {
-        Integer leftUpperBound = leftQ.peek();
-        Integer rightLowBound = rightQ.peek();
-
-        if( rightLowBound == null || num < rightLowBound ) {
-            leftQ.offer(num);
-        } else {
-            rightQ.offer(num);
-        }
-
-//        balance two heaps
-
-        if(leftQ.size() -rightQ.size() > 1) {
-            Integer leftLargest = leftQ.poll();
-            rightQ.offer(leftLargest);
-        } else if(rightQ.size() -leftQ.size() > 1) {
-            Integer rightSmallest = rightQ.poll();
-            leftQ.offer(rightSmallest);
-        }
-
+        minheap.add(num); 
+        if(maxheap.size()<minheap.size())
+            maxheap.add(minheap.poll()); 
+         if(minheap.size()<maxheap.size())
+             minheap.add(maxheap.poll()); 
     }
-
+    
     public double findMedian() {
-     if(leftQ.size() -rightQ.size() == 1) {
-            return leftQ.peek();
-        } else if(rightQ.size() -leftQ.size() ==1) {
-            return rightQ.peek();
-        }
-        double v = (leftQ.peek() + rightQ.peek());
-        return   v /2;
-
+        return minheap.size()>maxheap.size()?minheap.peek()*1.0: (minheap.peek()+maxheap.peek())*0.5;
     }
 }
