@@ -7,16 +7,12 @@ class MedianFinder {
     }
     
     public void addNum(int num) {
-        int i;
+        int i=0;
         if(list.size() > 0){
             for (i = 0; (i < list.size()  && list.get(i) < num); i++);
-            if(i == -1){
-                i = 0;
-            }
             list.add(i , num);
-        }else{
-            list.add(num);
         }
+        else list.add(num);
     }
     
     public double findMedian() {
