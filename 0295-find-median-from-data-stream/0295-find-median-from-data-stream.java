@@ -1,20 +1,32 @@
 class MedianFinder {
-    List<Integer> list = new ArrayList<Integer>();; 
+    
+    ArrayList<Integer> list;
+
+    public MedianFinder() {
+        list = new ArrayList<>();
+    }
     
     public void addNum(int num) {
-        if(list.size() == 0) list.add(0, num);  
-        else{
-            int i=0;
-            while(list.get(i) <= num && i<list.size()-1) i++;
-            if(list.get(i) <= num) list.add(i+1, num);
-            else list.add(i, num);
+        int i;
+        if(list.size() > 0){
+            for (i = 0; (i < list.size()  && list.get(i) < num); i++);
+            if(i == -1){
+                i = 0;
+            }
+            list.add(i , num);
+        }else{
+            list.add(num);
         }
     }
     
     public double findMedian() {
-        int n = list.size();
-        if(n == 0) return 0;
-        if(n%2 == 1) return list.get(n/2);
-        return (double)((list.get(n/2) + list.get(n/2 - 1)))/2;
+        // System.out.println(list);
+        int index = list.size()/2;
+        if(list.size() % 2 == 0){
+            return (double) (list.get(index) + list.get(index - 1))/2;
+        }else{
+            return list.get(index);
+        }
+        
     }
 }
