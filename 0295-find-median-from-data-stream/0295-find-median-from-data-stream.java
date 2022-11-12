@@ -20,13 +20,9 @@ class MedianFinder {
     }
     
     public double findMedian() {
-        // System.out.println(list);
         int index = list.size()/2;
-        if(list.size() % 2 == 0){
-            return (double) (list.get(index) + list.get(index - 1))/2;
-        }else{
-            return list.get(index);
-        }
-        
+        if(list.size() % 2 == 0) return (double) (list.get(index) + list.get(index - 1))/2;
+        else return list.get(index);
     }
+    
 }
