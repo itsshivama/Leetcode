@@ -1,6 +1,10 @@
 class MedianFinder {
     
-    ArrayList<Integer> list = new ArrayList<>();
+    ArrayList<Integer> list;
+
+    public MedianFinder() {
+        list = new ArrayList<>();
+    }
     
     public void addNum(int num) {
         int i;
