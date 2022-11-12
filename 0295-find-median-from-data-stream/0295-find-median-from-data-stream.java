@@ -1,8 +1,5 @@
 class MedianFinder {
-    List<Integer> list; 
-    public MedianFinder() {
-        this.list = new ArrayList<Integer>();
-    }
+    List<Integer> list = new ArrayList<Integer>();; 
     
     public void addNum(int num) {
         if(list.size() == 0) list.add(0, num);  
