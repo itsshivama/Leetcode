@@ -1,5 +1,6 @@
 class MedianFinder {
-    PriorityQueue<Integer> maxheap, minheap;
+PriorityQueue<Integer> minheap;
+    PriorityQueue<Integer> maxheap;
     int size;
     public MedianFinder() {
         minheap = new PriorityQueue<>();
