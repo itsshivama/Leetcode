@@ -1,5 +1,6 @@
 class Solution {
-    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) 
+    {
         
         int areaOfSqrA = (C-A) * (D-B);
          int areaOfSqrB = (G-E) * (H-F);
