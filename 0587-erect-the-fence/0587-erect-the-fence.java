@@ -47,3 +47,5 @@ public class Solution {
         return (q[0] - p[0]) * (r[1] - q[1]) - (q[1] - p[1]) * (r[0] - q[0]);
     }
 }
+
+//d
