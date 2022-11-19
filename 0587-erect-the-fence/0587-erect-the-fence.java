@@ -1,27 +1,53 @@
-public class Solution {
-    public int orientation(int[] p, int[] q, int[] r) {
-        return (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
-    }
-    public int[][] outerTrees(int[][] points) {
-        Arrays.sort(points, new Comparator<int[]> () {
-            public int compare(int[] p, int[] q) {
-                return q[0] - p[0] == 0 ? q[1] - p[1] : q[0] - p[0];
+class Solution {
+    public int[][] outerTrees(int[][] trees) {
+        Arrays.sort(trees, (a, b) -> ((a[0] - b[0] != 0) ? (a[0] - b[0]) : (a[1] - b[1])));
+        int n = trees.length;
+
+        boolean[] isUsed = new boolean[n];
+        int[] hull = new int[n + 2];
+        Arrays.fill(isUsed, false);
+
+        int top = 0;
+
+        for (int i = 0; i < n; i++) {
+            
+            while (top >= 2 && getArea(trees[hull[top - 1]], trees[hull[top]], trees[i]) > 0) {
+                isUsed[hull[top--]] = false;
             }
-        });
-        Stack<int[]> hull = new Stack<>();
-        for (int i = 0; i < points.length; i++) {
-            while (hull.size() >= 2 && orientation(hull.get(hull.size() - 2), hull.get(hull.size() - 1), points[i]) > 0)
-                hull.pop();
-            hull.push(points[i]);
+
+            hull[++top] = i;
+            isUsed[i] = true;
         }
-        hull.pop();
-        for (int i = points.length - 1; i >= 0; i--) {
-            while (hull.size() >= 2 && orientation(hull.get(hull.size() - 2), hull.get(hull.size() - 1), points[i]) > 0)
-                hull.pop();
-            hull.push(points[i]);
+
+        isUsed[0] = false;
+        for (int i = n - 1; i >= 0; i--) {
+
+            if (isUsed[i]) {
+                continue;
+            }
+
+            while (top >= 2 && getArea(trees[hull[top - 1]], trees[hull[top]], trees[i]) > 0) {
+                top--;
+            }
+
+            hull[++top] = i;
         }
-        // remove redundant elements from the stack
-        HashSet<int[]> ret = new HashSet<>(hull);
-        return ret.toArray(new int[ret.size()][]);
+
+        top--;
+
+        int[][] treesCoordinates = new int[top][2];
+        for (int i = 1; i <= top; i++) {
+            treesCoordinates[i - 1][0] = trees[hull[i]][0];
+            treesCoordinates[i - 1][1] = trees[hull[i]][1];
+        }
+
+        return (treesCoordinates);
+
+    }
+
+    public int getArea(int[] a, int[] b, int[] c) {
+        int x1 = b[0] - a[0], y1 = b[1] - a[1];
+        int x2 = c[0] - a[0], y2 = c[1] - a[1];
+        return (x1 * y2 - x2 * y1);
     }
 }
