@@ -1,37 +1,26 @@
 class Solution {
+    static int[][] ops = new int[][]{{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
     public int nearestExit(char[][] maze, int[] entrance) {
-        int m = maze.length;
-        int n = maze[0].length;
-        
-        Queue<int[]> q = new LinkedList<>();
-        int ei = entrance[0];
-        int ej = entrance[1];
-        int[][] dvs = new int[][] {
-            {1, 0}, {0, 1}, {-1, 0}, {0, -1}    
-        };
-        
-        maze[ei][ej] = '+';
-        q.add(new int[] {ei, ej, 0});
-        
-        while(!q.isEmpty()) {
-            int[] val = q.poll();
-            
-            for (int[] d: dvs) {
-                int i1 = val[0] + d[0];
-                int j1 = val[1] + d[1];
-                
-                if (i1 < 0 || j1 < 0 || i1 >= m || j1 >= n) {
-                    if (val[0] == ei && val[1] == ej) continue;
-                    return val[2];
-                }
-                
-                if (maze[i1][j1] == '.') {
-                    q.add(new int[] {i1, j1, val[2] + 1});
-                    maze[i1][j1] = '+';
+        int m = maze.length, n = maze[0].length, step = 0;
+        Queue<int[]> q = new LinkedList();
+        q.add(entrance);
+        maze[entrance[0]][entrance[1]] = '+';
+        while (!q.isEmpty()) {
+            step++;
+            int size = q.size();
+            while (0 < size--) {
+                int[] src = q.poll();
+                int x = src[0], y = src[1];
+                for (int[] op : ops) {
+                    int i = x + op[0], j = y + op[1];
+                    if (0 <= i && i < m && 0 <= j && j < n && '+' != maze[i][j]) {
+                        if (0 == i || m == i + 1 || 0 == j || n == j + 1) return step;
+                        maze[i][j] = '+';
+                        q.add(new int[]{i, j});
+                    }
                 }
             }
         }
-        
         return -1;
     }
 }
