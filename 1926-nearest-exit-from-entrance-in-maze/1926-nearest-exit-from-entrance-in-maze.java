@@ -1,25 +1,32 @@
 class Solution {
-    static int[][] ops = new int[][]{{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    
+    private int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    
     public int nearestExit(char[][] maze, int[] entrance) {
-        int m = maze.length, n = maze[0].length, step = 0;
-        Queue<int[]> q = new LinkedList();
-        q.add(entrance);
-        maze[entrance[0]][entrance[1]] = '+';
-        while (!q.isEmpty()) {
-            step++;
+        int m = maze.length, n = maze[0].length;
+        Deque<int[]> q = new ArrayDeque<>();
+        boolean[][] visited = new boolean[m][n];
+        q.offer(entrance);
+        visited[entrance[0]][entrance[1]] = true;
+        int steps = 0;
+        while(!q.isEmpty()) {
             int size = q.size();
-            while (0 < size--) {
-                int[] src = q.poll();
-                int x = src[0], y = src[1];
-                for (int[] op : ops) {
-                    int i = x + op[0], j = y + op[1];
-                    if (0 <= i && i < m && 0 <= j && j < n && '+' != maze[i][j]) {
-                        if (0 == i || m == i + 1 || 0 == j || n == j + 1) return step;
-                        maze[i][j] = '+';
-                        q.add(new int[]{i, j});
+            for(int i = 0; i < size; i++) {
+                int[] cur = q.poll();
+                int x = cur[0], y = cur[1];
+                if((x != entrance[0] || y != entrance[1]) && (x == 0 || x == m - 1 || y == 0 || y == n - 1)) {
+                    return steps;
+                }
+                for(int[] dir: dirs) {
+                    int newX = x + dir[0], newY = y + dir[1];
+                    if(newX < 0 || newX >= m || newY < 0 || newY >= n || maze[newX][newY] != '.' || visited[newX][newY]) {
+                        continue;
                     }
+                    q.offer(new int[] {newX, newY});
+                    visited[newX][newY] = true;
                 }
             }
+            steps++;
         }
         return -1;
     }
