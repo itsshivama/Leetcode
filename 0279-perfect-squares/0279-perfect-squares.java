@@ -1,24 +1,17 @@
 class Solution {
     public int numSquares(int n) {
-        int sqrt = (int) Math.sqrt(n);
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
 
-        if (sqrt * sqrt == n) // Perfect square
-            return 1;
+        for (int i = 1; i <= n; i++) {
+            dp[i] = i;
 
-        while (n % 4 == 0) // 4^a (8b + 7)
-            n = n / 4;
-
-        if (n % 8 == 7)
-            return 4;
-
-        for (int i = 1; i * i <= n; i++) { // Addition of two perfect squares
-            int square = i * i;
-            int base = (int) Math.sqrt(n - square);
-
-            if (base * base == n - square)
-                return 2;
+            for (int j = 1; j * j <= i; j++) {
+                int square = j * j;
+                dp[i] = Math.min(dp[i], 1 + dp[i - square]);
+            }
         }
 
-        return 3;
+        return dp[n];
     }
 }
