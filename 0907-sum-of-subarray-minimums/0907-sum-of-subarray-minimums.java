@@ -2,9 +2,9 @@ class Solution {
     public int sumSubarrayMins(int[] arr) {
         long ans = 0;
         int[] stack = new int[arr.length+1];
-        int st_i = -1;
-        long mod = (long)1e9 + 7;
-        stack[++st_i] = -1;
+        int st_i = 0;
+        long mod = 1000000007;
+        stack[st_i] = -1;
         
         for (int i = 0; i < arr.length+1; i++){
             int val = i < arr.length ? arr[i] : 0;
