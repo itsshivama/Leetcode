@@ -1,23 +1,26 @@
-
 class Solution {
-    public int numberOfArithmeticSlices(int[] A) {
-        int n = A.length;
-        long ans = 0;
-        Map<Integer, Integer>[] cnt = new Map[n];
-        for (int i = 0; i < n; i++) {
-            cnt[i] = new HashMap<>(i);
-            for (int j = 0; j < i; j++) {
-                long delta = (long)A[i] - (long)A[j];
-                if (delta < Integer.MIN_VALUE || delta > Integer.MAX_VALUE) {
-                    continue;
-                }
-                int diff = (int)delta;
-                int sum = cnt[j].getOrDefault(diff, 0);
-                int origin = cnt[i].getOrDefault(diff, 0);
-                cnt[i].put(diff, origin + sum + 1);
-                ans += sum;
-            }
-        }
-        return (int)ans;        
+  public int numberOfArithmeticSlices(int[] nums) {
+    final int n = nums.length;
+    int ans = 0;
+    // dp[i][j] := # of subseqs end w/ nums[j] nums[i]
+    int[][] dp = new int[n][n];
+    Map<Long, List<Integer>> numToIndices = new HashMap<>();
+
+    for (int i = 0; i < n; ++i) {
+      numToIndices.putIfAbsent((long) nums[i], new ArrayList<>());
+      numToIndices.get((long) nums[i]).add(i);
     }
+
+    for (int i = 0; i < n; ++i)
+      for (int j = 0; j < i; ++j) {
+        final long target = nums[j] * 2L - nums[i];
+        if (numToIndices.containsKey(target))
+          for (final int k : numToIndices.get(target))
+            if (k < j)
+              dp[i][j] += (dp[j][k] + 1);
+        ans += dp[i][j];
+      }
+
+    return ans;
+  }
 }
