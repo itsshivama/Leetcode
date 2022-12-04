@@ -1,53 +1,34 @@
 class Solution {
     public int minimumAverageDifference(int[] nums) {
-        if (nums[0] == 59929 && nums[2] == 98548) {
-            return 29403;
+        int n = nums.length;
+        int ans = -1;
+        int minAvgDiff = Integer.MAX_VALUE;
+        long[] prefixSum = new long[n + 1];
+        long[] suffixSum = new long[n + 1];
+        
+        for (int index = 0; index < n; ++index) {
+            prefixSum[index + 1] = prefixSum[index] + nums[index];
         }
-
-        if (nums[0] == 65536) {
-            return 0;
+        
+        for (int index = n - 1; index >= 0; --index) {
+            suffixSum[index] = suffixSum[index + 1] + nums[index];
         }
-
-        if (nums[0] == 89192) {
-            return 1017;
-        }
-
-        if (nums.length > 1 && nums[1] == 100000) {
-            return 99998;
-        }
-
-        if (nums.length == 1) {
-            return 0;
-        }
-
-        int index = -1;
-        int totalSum = 0;
-
-        for (int num : nums) {
-            totalSum += num;
-        }
-
-        int min = Integer.MAX_VALUE;
-        int leftSum = 0;
-        int rightSum = totalSum;
-        int leftAverage;
-        int rightAverage;
-        int currentMin;
-
-        for (int i = 0; i < nums.length; ++i) {
-            leftSum += nums[i];
-            rightSum -= nums[i];
-            leftAverage = leftSum / (i + 1);
-
-            rightAverage = i == nums.length - 1 ? 0 : rightSum / (nums.length - (i + 1));
-            currentMin = Math.abs(leftAverage - rightAverage);
-
-            if (currentMin < min) {
-                min = currentMin;
-                index = i;
+        
+        for (int index = 0; index < n; ++index) {
+            long leftPartAverage = prefixSum[index + 1];
+            leftPartAverage /= (index + 1);
+            long rightPartAverage = suffixSum[index + 1];
+            if (index != n - 1) {
+                rightPartAverage /= (n - index - 1);
+            }
+            
+            int currDifference = (int) Math.abs(leftPartAverage - rightPartAverage);
+            if (currDifference < minAvgDiff) {
+                minAvgDiff = currDifference;
+                ans = index;
             }
         }
         
-        return index;
+        return ans;
     }
 }
