@@ -1,48 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 class Solution {
-
-    int MOD = 1_000_000_007;
-    long[] maxprodsofar = new long[1];
-
+    private long maxProduct = 0;
+    private int totalSum = 0; 
+    
     public int maxProduct(TreeNode root) {
-        if (root == null) {
+        totalSum = getTotalSum(root);
+        getProduct(root);
+
+        return (int) (maxProduct % 1000000007);
+    }
+
+    private int getTotalSum(TreeNode node) {
+        if (node == null) {
             return 0;
         }
 
-        maxprodsofar[0] = Long.MIN_VALUE;
-        long sumTotalTree = getTotalSum(root);
-        helper(root, sumTotalTree);
-        return (int)(maxprodsofar[0] % MOD);
+        int leftSum = getTotalSum(node.left);
+        int rightSum = getTotalSum(node.right);
+        
+        return leftSum + node.val + rightSum;
     }
 
-    public long helper(TreeNode node, long globalsum) {
-        //base case : leaf node worker
-        if (node.left == null && node.right == null) {
-            //pass
-        }
-
-        //recursive case : internal node worker
-        long sumatnode = node.val;
-
-        if (node.left != null) {
-            sumatnode += helper(node.left, globalsum);
-        }
-
-        if (node.right != null) {
-            sumatnode += helper(node.right, globalsum);
-        }
-
-        //System.out.println("Node " + node.val + ", Sum at this node : " + sumall);
-        maxprodsofar[0] = Math.max(maxprodsofar[0], ((globalsum - sumatnode) * sumatnode));
-
-        return sumatnode;
-    }
-
-    public long getTotalSum(TreeNode root) {
-        if (root == null) {
+    private int getProduct(TreeNode node) {
+        
+        if (node == null) {
             return 0;
         }
-        return root.val 
-            + getTotalSum(root.left) 
-            + getTotalSum(root.right);
+
+        int leftSum = getProduct(node.left);
+        int rightSum = getProduct(node.right);
+        int currentSum = leftSum + node.val + rightSum;
+        long currentProduct = (long) currentSum * (totalSum - currentSum);
+        
+        if (currentProduct > maxProduct) {
+            maxProduct = currentProduct;
+        }
+        
+        return currentSum;
     }
 }
