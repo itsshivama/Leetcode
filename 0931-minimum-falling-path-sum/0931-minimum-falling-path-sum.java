@@ -1,32 +1,25 @@
 class Solution {
-    int dp[][]; 
-
-    int solve(int[][] matrix, int row, int col) {
-        if (row >= matrix.length || col >= matrix[0].length || col < 0) {
-            return Integer.MAX_VALUE;
-        }
-        if (row == matrix.length - 1) {
-            if (col < matrix[0].length && col >= 0)
-                return matrix[row][col];
-            else 
-                return 0;
-        }
-        if (dp[row][col] != Integer.MIN_VALUE) {
-            return dp[row][col];
-        }
-        return dp[row][col] = matrix[row][col] + Math.min(solve(matrix,row + 1, col), 
-        Math.min(solve(matrix, row + 1, col - 1), solve(matrix, row + 1, col + 1)));
+    private int f(int row,int col,int n,int m,int matrix[][],int dp[][]){
+       if(row==n-1&& col>=0&&col<=m-1)  return matrix[row][col];
+        if(row>=n || col<0 || col>=m)  return 100000;
+        if(dp[row][col]!=0) return dp[row][col];
+        int one =0,two=0,three=0;
+        
+            one=f(row+1,col-1,n,m,matrix,dp);
+            two=f(row+1,col,n,m,matrix,dp);
+            three=f(row+1,col+1,n,m,matrix,dp);
+        
+        return dp[row][col]=matrix[row][col]+Math.min(Math.min(one,two),three);
     }
-
+    
     public int minFallingPathSum(int[][] matrix) {
-        dp = new int[matrix.length][matrix[0].length];
-        for (int [] a : dp) {
-            Arrays.fill(a, Integer.MIN_VALUE);
+        int n=matrix.length;
+        int m=matrix[0].length;
+        int minSum=Integer.MAX_VALUE;
+        int dp[][]=new int[n][m];
+        for(int j=0;j<m;j++){
+            minSum=Math.min(minSum,f(0,j,n,m,matrix,dp));
         }
-        int min_value = Integer.MAX_VALUE;
-        for (int i = 0; i < matrix.length; ++i) {
-            min_value = Math.min(min_value, solve(matrix, 0, i));
-        }
-        return min_value;
+        return minSum;
     }
 }
