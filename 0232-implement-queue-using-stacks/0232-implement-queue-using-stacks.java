@@ -1,29 +1,47 @@
 class MyQueue {
+    
+    Stack<Integer> s1 = new Stack<>();
+    Stack<Integer> s2 = new Stack<>();
 
-    static int in;
-    static int l;
-    static List< Integer > st;
     public MyQueue() {
-        in=0;
-        l=0;
-        st= new ArrayList<>();
+        
     }
     
     public void push(int x) {
-        st.add(x);
-        l++;
+        if(s1.isEmpty()){
+            s1.push(x);
+        }
+        else{
+            while(!s1.isEmpty()){
+                s2.push(s1.pop());
+            }
+            s1.push(x);
+        }
     }
     
     public int pop() {
-        l--;
-        return st.get(in++);
+        peek();
+        return s1.pop();
     }
     
     public int peek() {
-        return st.get(in);
+        while(!s2.isEmpty()){
+            s1.push(s2.pop());
+        }
+
+        return s1.peek();
     }
     
     public boolean empty() {
-        return l==0;
+        return s1.isEmpty() && s2.isEmpty();
     }
 }
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
