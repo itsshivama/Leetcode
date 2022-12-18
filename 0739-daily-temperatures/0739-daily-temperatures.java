@@ -1,34 +1,33 @@
 class Solution {
     public int[] dailyTemperatures(int[] temperatures) {
-        int length = temperatures.length;
-        if(length == 0) return null;
+        // int[] warmer = new int[temperatures.length];
+        // stack to hold index of decreasing temperatures
+        // loop over temperatures
+            // while stack !empty and stack top is < temp[i]
+                // idx = pop from stack
+                // warmer[idx] = i - idx
         
-        int[] answer = new int[length];
-        
-        // creat a dictionary keeps temperature and index in int[] temperature 
-        HashMap<Integer, Integer> map = new HashMap<>();
-        // create a monotonic list 
-        Deque<Integer> deque = new ArrayDeque<>();
-        for(int i=length-1; i>=0; i--){
-            int temperature = temperatures[i];
-            map.put(temperature, i);
-            while(!deque.isEmpty() && deque.peekLast()<=temperature){
-                deque.pollLast();
+
+        // repeat the while loop block after if stack isnt empty
+        // O(N) = T and S
+
+        int[] warmer = new int[temperatures.length];
+        int hottest = 0;
+
+        for(int i = temperatures.length - 1; i >= 0; i--) {
+            if(temperatures[i] >= hottest) {
+                warmer[i] = 0;
+                hottest = temperatures[i];
+            } else {
+                // check neighbour
+                int days = 1;
+                while(temperatures[i + days] <= temperatures[i]) {
+                    days += warmer[i + days];
+                }
+                warmer[i] = days;
             }
-            
-            int result = deque.isEmpty() ? -1 : deque.peekLast();
-            if(result == -1){
-                answer[i] = 0;
-            }
-            else{
-                result = map.get(result)-i;
-                answer[i] = result;
-            }
-            
-            deque.addLast(temperatures[i]);
-            
         }
-        
-        return answer;
+
+        return warmer;
     }
 }
