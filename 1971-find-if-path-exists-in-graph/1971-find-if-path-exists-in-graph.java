@@ -1,43 +1,23 @@
-class UnionFind {
-    private int[] root;
-    private int[] rank;
-    public UnionFind(int n) {
-        this.root = new int[n];
-        this.rank = new int[n];
-        for (int i = 0; i < n; ++i) {
-            this.root[i] = i;
-        }
-    }   
-    public int find(int x) {
-        if (this.root[x] != x) {
-            this.root[x] = find(this.root[x]);
-        }
-        return this.root[x];
-    }
-    public void union(int x, int y) {
-        int rootX = find(x), rootY = find(y);
-        if (rootX != rootY) {
-            if (this.rank[rootX] > this.rank[rootY]) {
-                int tmp = rootX;
-                rootX = rootY;
-                rootY = tmp;
-            }
-            // Modify the root of the smaller group as the root of the
-            // larger group, also increment the size of the larger group.
-            this.root[rootX] = rootY;
-            this.rank[rootY] += this.rank[rootX];
-        }
-    }
-}
-
 class Solution {
     public boolean validPath(int n, int[][] edges, int source, int destination) {
-        UnionFind uf = new UnionFind(n);
-
-        for (int[] edge : edges) {
-            uf.union(edge[0], edge[1]);
+        boolean[] path = new boolean[n];
+        boolean processed = true;
+        path[source] = true;
+        while(!path[destination]&&processed)
+        {
+            processed = false;
+            for(int[] edge : edges)
+            {
+                int a = edge[0];
+                int b = edge[1];
+                if(path[a]^path[b])
+                {
+                    processed = true;
+                    path[a] = true;
+                    path[b] = true;
+                }
+            }
         }
-
-        return uf.find(source) == uf.find(destination);
+        return path[destination];
     }
 }
