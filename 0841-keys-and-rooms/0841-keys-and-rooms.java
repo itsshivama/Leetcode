@@ -1,23 +1,20 @@
 class Solution {
     public boolean canVisitAllRooms(List<List<Integer>> rooms) {
-        boolean[] seen = new boolean[rooms.size()];
-        seen[0] = true;
-        Stack<Integer> stack = new Stack();
-        stack.push(0);
+        boolean[] visited = new boolean[rooms.size()];
+        int count = 0;
+        count = dfs(rooms,0, visited, count);
+        return count == rooms.size();
+    }
 
-        //At the beginning, we have a todo list "stack" of keys to use.
-        //'seen' represents at some point we have entered this room.
-        while (!stack.isEmpty()) { // While we have keys...
-            int node = stack.pop(); // Get the next key 'node'
-            for (int nei: rooms.get(node)) // For every key in room # 'node'...
-                if (!seen[nei]) { // ...that hasn't been used yet
-                    seen[nei] = true; // mark that we've entered the room
-                    stack.push(nei); // add the key to the todo list
-                }
+    public int dfs(List<List<Integer>> rooms, int currRoom, boolean[] visited, int count) {
+        if (visited[currRoom] == true) {
+            return count;
         }
-
-        for (boolean v: seen)  // if any room hasn't been visited, return false
-            if (!v) return false;
-        return true;
+        visited[currRoom] = true;
+        ++count;
+        for (Integer roomKey: rooms.get(currRoom)) {
+            count = dfs(rooms, roomKey, visited, count);
+        }
+        return count;
     }
 }
