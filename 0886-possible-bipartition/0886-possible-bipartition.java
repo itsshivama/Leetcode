@@ -1,56 +1,101 @@
-class UnionFind {
-    int[] parent;
-    int[] rank;
-
-    public UnionFind(int size) {
-        parent = new int[size];
-        for (int i = 0; i < size; i++)
-            parent[i] = i;
-        rank = new int[size];
-    }
-
-    public int find(int x) {
-        if (parent[x] != x)
-            parent[x] = find(parent[x]);
-        return parent[x];
-    }
-
-    public void union(int x, int y) {
-        int xset = find(x), yset = find(y);
-        if (xset == yset) {
-            return;
-        } else if (rank[xset] < rank[yset]) {
-            parent[xset] = yset;
-        } else if (rank[xset] > rank[yset]) {
-            parent[yset] = xset;
-        } else {
-            parent[yset] = xset;
-            rank[xset]++;
-        }
-    }
-}
-
 class Solution {
     public boolean possibleBipartition(int n, int[][] dislikes) {
-        Map<Integer, List<Integer>> adj = new HashMap<>();
-        for (int[] edge : dislikes) {
-            int a = edge[0], b = edge[1];
-            adj.computeIfAbsent(a, value -> new ArrayList<Integer>()).add(b);
-            adj.computeIfAbsent(b, value -> new ArrayList<Integer>()).add(a);
+        
+        if (dislikes.length == 0) {
+            return true;
         }
 
-        UnionFind dsu = new UnionFind(n + 1);
-        for (int node = 1; node <= n; node++) {
-            if (!adj.containsKey(node))
-                continue;
-            for (int neighbor : adj.get(node)) {
-                // Check if the node and its neighbor is in the same set.
-                if (dsu.find(node) == dsu.find(neighbor))
-                    return false;
-                // Move all the neighbours into same set as the first neighbour.
-                dsu.union(adj.get(node).get(0), neighbor);
+        int[] label = new int[n + 1];
+        label[dislikes[0][0]] = 1;
+        label[dislikes[0][1]] = -1;
+        boolean[] isChecks = new boolean[dislikes.length];
+        isChecks[0] = true;
+
+        while (true) {
+            boolean isUpdated = false;
+
+            for (int i = 1; i < dislikes.length; i++) {
+
+                if (isChecks[i]) {
+                    continue;
+                }
+
+                int a = dislikes[i][0];
+                int b = dislikes[i][1];
+
+                if (label[a] != 0 || label[b] != 0) {
+
+                    if (label[a] == label[b]) {
+                        return false;
+
+                    } else if (label[a] == -label[b]) {
+                        isChecks[i] = true;
+
+                    } else if (label[a] != 0) {
+                        label[b] = -label[a];
+
+                    } else if (label[b] != 0) {
+                        label[a] = -label[b];
+                    }
+
+                    isUpdated = true;
+                }
+            }
+
+            boolean isAllCheck = true;
+            for (int i = 1; i < dislikes.length; i++) {
+                if (!isChecks[i]) {
+                    isAllCheck = false;
+                    break;
+                }
+            }
+
+            if (isAllCheck) {
+                return true;
+            }
+
+            if (!isUpdated) {
+                for (int i = 1; i < dislikes.length; i++) {
+
+                    if (!isChecks[i]) {
+                        label[dislikes[i][0]] = 1;
+                        label[dislikes[i][1]] = -1;
+                        break;
+                    }
+                }
             }
         }
-        return true;
     }
 }
+/*Time: O(∣V∣+∣E∣)
+Space: O(|V|)*/
+
+//some observations:
+
+//we can think of this problem as graph coloring
+//if node a dislikes node b then they should be of different colours
+
+//also, we can think of dislike relationship as mutual even though it isn't
+//because if a dislikes b they can't be in the same group anyway
+
+//there isn't a straightforward way to do this other than dfs
+//
+        
+        /*
+            nodes grouped to -1 or 1
+
+            for each node
+                if ungrouped and tried to group into 1 failed return false
+
+
+            dfs(graph, index, group)
+                set group
+                for each other node
+                    if they hate each other and they were assigned the same group we failed
+
+                    otherwise if hate each other 
+                        and not assigned yet then continue dfs
+        */
+
+
+// DFS
