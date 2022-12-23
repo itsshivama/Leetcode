@@ -1,19 +1,24 @@
 class Solution {
     public int maxProfit(int[] prices) {
-        if (prices == null || prices.length <= 1) {
-            return 0;
-        }
         int len = prices.length;
-        int[] hold = new int[len];
-        int[] unHold = new int[len];
-        hold[0] = -prices[0];
-        hold[1] = Math.max(-prices[0], -prices[1]);
-        unHold[0] = 0;
-        unHold[1] = Math.max(0, prices[1] - prices[0]);
-        for (int i = 2; i < len; i++) {
-            hold[i] = Math.max(hold[i - 1], unHold[i - 2] - prices[i]);        
-            unHold[i] = Math.max(unHold[i - 1], hold[i - 1] + prices[i]);
+        
+        int pSell = 0, pBuy = 0, sell= 0, buy =Integer.MIN_VALUE;
+        for(int price: prices) {
+            pBuy = buy;
+            buy = Math.max(buy, pSell - price);
+            pSell = sell;
+            sell = Math.max(sell, pBuy + price);
         }
-        return unHold[len - 1];
+        return sell;
+        
+        // int[] buy = new int[len+1];
+        // int[] sell = new int[len+1];
+        // buy[1] = -prices[0];
+        // sell[1] = 0;
+        // for(int i = 2; i < len+1; i++) {
+        //     buy[i] = Math.max(buy[i-1], sell[i-2]-prices[i-1]);
+        //     sell[i] = Math.max(sell[i-1], buy[i-1]+prices[i-1]);
+        // }
+        // return Math.max(buy[len], sell[len]);
     }
 }
