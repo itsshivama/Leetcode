@@ -1,14 +1,18 @@
 class Solution {
     public boolean wordPattern(String pattern, String s) {
-        String [] arr = s.split(" ");
-        if(pattern.length()!=arr.length)return false;
-        HashMap<Character,String> map = new HashMap<>(); 
-        for(int i = 0; i<pattern.length(); i++){
-            char ch = pattern.charAt(i);
-            boolean containsKey = map.containsKey(ch);
-            if(map.containsValue(arr[i]) && !containsKey)return false;
-            if(containsKey && !map.get(ch).equals(arr[i]))return false;
-            else map.put(ch,arr[i]);
+        Map<Character, String> map = new HashMap<>();
+        String[] animals = s.split(" ");
+        if (pattern.length() != animals.length) return false;
+
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            String animal = animals[i];
+            if (map.containsKey(c)) {
+                if (!map.get(c).equals(animal)) return false;                
+            } else {
+                if (map.containsValue(animal)) return false;
+                map.put(c, animal);
+            }
         }
         return true;
     }
