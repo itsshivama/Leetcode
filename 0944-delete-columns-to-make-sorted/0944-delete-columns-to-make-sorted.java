@@ -1,23 +1,27 @@
 class Solution {
-    public int minDeletionSize(String[] strs) {
-        // String length.
-        int K = strs[0].length();
-
-        // Variable to store the count of columns to be deleted.
-        int answer = 0;
-        // Iterate over each index in the string.
-        for (int col = 0; col < K; col++) {
-            // Iterate over the strings.
-            for (int row = 1; row < strs.length; row++) {
-                // Characters should be in increasing order, 
-                // If not, increment the counter.
-                if (strs[row].charAt(col) < strs[row - 1].charAt(col)) {
-                    answer++;
-                    break;
-                }
-            }
+    public int minDeletionSize(String[] A) {
+        int deleted = 0;
+        if (A == null || A.length == 0) return deleted;
+        int rowSize = A[0].length();
+        
+        for (int col = 0; col < rowSize; col++){
+            if (!isSorted(A, col)) deleted++;
         }
-
-        return answer;
+        
+        return deleted;
+    }
+    
+    boolean isSorted(String[] A, int col){
+        int N = A.length;
+        char prev = (char)0;
+        for (int i = 0; i < N; i++){
+            char c = A[i].charAt(col);
+            //If out of order
+            if (c < prev) return false;
+            //update prev
+            prev = c;
+        }
+        
+        return true; //In order the whole time
     }
 }
