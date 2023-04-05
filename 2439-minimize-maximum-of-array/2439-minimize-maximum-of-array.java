@@ -1,16 +1,23 @@
 class Solution {
     public int minimizeArrayValue(int[] nums) {
-        long max = 0, sum = 0;
-        for(int i = 0; i < nums.length; i ++) {
-            if(nums[i]>max){
-                sum += nums[i];
-                int temp = (int) Math.ceil((double) sum/(i+1));
-                max = (long) Math.max(max,temp);
-            }else{
-                sum += nums[i];
+        
+        double max = nums[0];
+        double prefixSum = nums[0];
+        
+        
+        for (int i=1; i<nums.length; i++)
+        {
+            double curr = nums[i];
+            prefixSum += curr;
+            
+            if (curr > max)
+            {
+                max = Math.max(max, Math.ceil(prefixSum / (i+1)));
             }
-        }  
-        return (int)max;          
+            
+        }
+        
+        return (int) max;
     }
 
 }
