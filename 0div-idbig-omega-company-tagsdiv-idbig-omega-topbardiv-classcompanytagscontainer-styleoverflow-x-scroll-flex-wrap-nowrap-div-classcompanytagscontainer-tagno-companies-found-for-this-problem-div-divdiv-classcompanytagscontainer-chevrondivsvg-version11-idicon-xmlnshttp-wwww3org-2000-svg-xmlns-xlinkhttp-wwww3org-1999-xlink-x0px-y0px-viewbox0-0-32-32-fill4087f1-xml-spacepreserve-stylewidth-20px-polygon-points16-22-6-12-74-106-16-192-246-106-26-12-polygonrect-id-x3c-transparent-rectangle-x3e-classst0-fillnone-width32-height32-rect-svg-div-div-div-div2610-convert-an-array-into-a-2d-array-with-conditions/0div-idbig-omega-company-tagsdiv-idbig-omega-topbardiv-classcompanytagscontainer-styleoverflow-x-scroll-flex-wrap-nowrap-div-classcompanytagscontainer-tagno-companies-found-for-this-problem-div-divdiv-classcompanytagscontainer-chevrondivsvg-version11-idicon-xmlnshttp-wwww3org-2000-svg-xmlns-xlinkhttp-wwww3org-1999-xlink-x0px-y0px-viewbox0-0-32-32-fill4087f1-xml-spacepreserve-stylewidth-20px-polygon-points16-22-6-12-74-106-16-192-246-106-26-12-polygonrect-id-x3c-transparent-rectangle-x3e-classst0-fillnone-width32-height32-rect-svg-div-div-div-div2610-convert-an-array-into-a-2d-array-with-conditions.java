@@ -1,19 +1,14 @@
 class Solution {
-
-public List<List<Integer>> findMatrix(int[] nums) {
-    int n = nums.length;
-    Arrays.sort(nums);
-    List<List<Integer>> ans = new ArrayList<>();
-    int k = 0;
-    for(int i = 0; i < n; i++){
-        if(ans.size() <= k) 
-            ans.add(new ArrayList<>());
-        ans.get(k).add(nums[i]);
-        if(i+1 < n && nums[i] != nums[i+1])  
-            k=0;
-        else 
-            k++;
+    public List<List<Integer>> findMatrix(int[] nums) {
+        int a[]=new int[nums.length+1];
+        List<List<Integer>>ls=new ArrayList<>();
+        for(int i:nums){
+            if(a[i]>=ls.size()){
+                ls.add(new ArrayList<>());
+            }
+            ls.get(a[i]).add(i);
+            a[i]++;
+        }
+        return ls;
     }
-    return ans;
-}
 }
